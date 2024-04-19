@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emiciones de Dioxidod de carbono en la region</title>
+    <link rel="stylesheet" href="/Styles/Style.css">
+    <link rel="icon" href="/Img/co2.jpg" />
+    
+</head>
+<body>
+    <img src="/Img/co2.jpg" class="img-fluid" alt="Logo de Mapas" width="100" height="100" />
+    <div style="text-align: center;">
+    <h1>Demostración del dioxido de carbono emitidas en los años 2003 y 2004</h1>
+    </div>
+    
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">Año de referencia</th>
+                    <th>%</th>
+                    <th colspan="4">Años de proyección</th>
+                </tr>
+                <tr>
+                    <th>Paises</th>
+                    <th>Año 2003</th>
+                    <th>Año 2004</th>
+                    <th>Porcentaje</th>
+                    <th>Año 2020</th>
+                    <th>Año 2021</th>
+                    <th>Año 2022</th>
+                    <th>Año 2023</th>
+                </tr>
+            </thead>
+            <tbody id="form-container">
+            </tbody>
+        </table>
+    </div>
+    <div class="container">
+        <button onclick="guardarYProcesar()">Guardar y Procesar</button>
+    </div>
+    
+
+    <script>
+        const paises = [
+        { nombre: "Costa Rica", año2003: "6474.64", año2004: "6405.1", año2020: "7000", año2021: "7200", año2022: "7400", año2023: "7600" },
+        { nombre: "Panama", año2003: "6045.7", año2004: "5660.69", año2020: "6200", año2021: "6400", año2022: "6600", año2023: "6800" },
+        { nombre: "Honduras", año2003: "6493.073", año2004: "7614.87", año2020: "6600", año2021: "6800", año2022: "7000", año2023: "7200" },
+        { nombre: "El Salvador", año2003: "6379.318", año2004: "6166.72", año2020: "7200", año2021: "7400", año2022: "7600", año2023: "7800" },
+        { nombre: "Nicaragua", año2003: "3816.6", año2004: "4007.209", año2020: "4800", año2021: "5000", año2022: "5200", año2023: "5400" },
+        { nombre: "Belice", año2003: "", año2004: "", año2020: "", año2021: "", año2022: "", año2023: "" },
+        { nombre: "Guatemala", año2003: "10652.549", año2004: "12219.7", año2020: "11000", año2021: "11200", año2022: "11400", año2023: "11600" }
+    ];
+    
+        function generarTabla() {
+            const tbody = document.getElementById('form-container');
+    
+            paises.forEach(pais => {
+                const porcentaje = calcularPorcentaje(pais.año2003, pais.año2004);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${pais.nombre}</td>
+                    <td contenteditable="true" onkeypress="return soloNumeros(event)">${pais.año2003}</td>
+                    <td contenteditable="true" onkeypress="return soloNumeros(event)">${pais.año2004}</td>
+                    <td>${porcentaje !== null ? porcentaje.toFixed(2) + '%' : ''}</td> <!-- Porcentaje -->
+                    <td contenteditable="true" onkeypress="return soloNumeros(event)">${pais.año2020}</td>
+                    <td contenteditable="true" onkeypress="return soloNumeros(event)">${pais.año2021}</td>
+                    <td contenteditable="true" onkeypress="return soloNumeros(event)">${pais.año2022}</td>
+                    <td contenteditable="true" onkeypress="return soloNumeros(event)">${pais.año2023}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+    
+        function soloNumeros(evt) {
+            const charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+    
+        function calcularPorcentaje(año2003, año2004) {
+            if (año2003 !== '' && año2004 !== '') {
+                const porcentaje = (((parseFloat(año2003) - parseFloat(año2004)) / parseFloat(año2003)) * 100) * -1;
+                return porcentaje;
+            } else {
+                return null;
+            }
+        }
+    
+        function guardarYProcesar() {
+            const datos = [];
+            const tbody = document.getElementById('form-container').rows;
+            for (let i = 0; i < tbody.length; i++) {
+                const pais = tbody[i].cells[0].innerText;
+                const año2003 = tbody[i].cells[1].innerText;
+                const año2004 = tbody[i].cells[2].innerText;
+                const año2020 = tbody[i].cells[4].innerText;
+                const año2021 = tbody[i].cells[5].innerText;
+                const año2022 = tbody[i].cells[6].innerText;
+                const año2023 = tbody[i].cells[7].innerText;
+                datos.push({ pais, año2003, año2004, año2020, año2021, año2022, año2023 });
+            }
+    
+            localStorage.setItem('datosEmisiones', JSON.stringify(datos));
+    
+            window.location.href = 'procesa.html';
+        }
+    
+        generarTabla();
+
+        
+    </script>
+
+<tbody id="resultados-container"></tbody>
+
+       
+</body>
+</html>
+
+

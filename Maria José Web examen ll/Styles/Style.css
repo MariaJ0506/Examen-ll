@@ -1,0 +1,30 @@
+body{
+    background-color: white;
+    margin: 0;
+    padding: 15px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 50%;
+    margin: auto;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px;
+}
+
+th {
+    background-color: #9481fc;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    color: white;
+    padding: 10px;
+}
